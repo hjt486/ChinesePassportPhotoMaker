@@ -3,33 +3,80 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ChinesePassportPhotoMaker"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="10*" />
-        </Grid.RowDefinitions>
-        <Label Grid.Row="0" x:Name="DebugLabel1"  Content="X" />
-        <Label Grid.Row="1" x:Name="DebugLabel2"  Content="Y" />
-        <Canvas Grid.Row="2" x:Name="ImageCanvas" Height="450" Width="350" Background="Gray" ClipToBounds="True"
-                Mouse.MouseWheel="ImageViewer_MouseWheel"
-                >
-            <Image
-                x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
-                Margin="0,0,0,0"
-                Canvas.Top="0" Canvas.Left="0"
-                Width="600"
-                Height="800"
-                Stretch="Fill"
-                MouseDown="ImageViewer_MouseDown"
-                Mouse.MouseUp="ImageViewer_MouseUp"
-                Mouse.MouseMove="ImageViewer_MouseMove"
-                Source="C:\Users\jiata\Downloads\WangKunpeng.PNG"
-                ClipToBounds="False"
-                />
+        Title="中国护照照片生成器" Width="1024" Height="768">
+  <Window.Resources>
+    <System:Double x:Key="PhotoWidth">396</System:Double>
+    <System:Double x:Key="PhotoHeight">576</System:Double>
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="10*" />
+      <RowDefinition Height="1*" />
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="1*"/>
+      </Grid.ColumnDefinitions>
+      <Canvas Grid.Column="0" x:Name="ImageCanvas"
+              Width="{StaticResource PhotoWidth}"
+              Height="{StaticResource PhotoHeight}"
+              Background="Gray" ClipToBounds="True"
+              Mouse.MouseWheel="ImageViewer_MouseWheel"
+              Mouse.MouseMove="ImageOrOverlay_MouseMove">
+        <Image
+          x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
+          Margin="0,0,0,0"
+          Canvas.Top="0" Canvas.Left="0"
+          Width="600"
+          Height="800"
+          Stretch="Fill"
+          Mouse.MouseDown="ImageViewer_MouseDown"
+          Mouse.MouseUp="ImageViewer_MouseUp"
+          Source="/ChinesePassportPhotoMaker;component/Resources/Example.png"
+          ClipToBounds="False"/>
+        <Canvas Name="OverlayFixed">
+          <Rectangle Width="{StaticResource PhotoWidth}" Height="36" Canvas.Left="0" Canvas.Top="0" Fill="Red" Opacity="0.3" />
+          <Rectangle Width="198" Height="24" Canvas.Left="99" Canvas.Top="36" Fill="Green" Opacity="0.3" />
+          <Rectangle Width="{StaticResource PhotoWidth}" Height="84" Canvas.Left="0" Canvas.Top="492" Fill="Red" Opacity="0.3" />
+          <Line StrokeThickness="2" X1="198" Y1="0" X2="198" Y2="{StaticResource PhotoHeight}" Canvas.Left="0" Canvas.Top="0" Stroke="Yellow" Opacity="0.3" />
         </Canvas>
+        <Canvas Name="OverlayFloating"
+                Mouse.MouseDown="OverlayFloating_MouseDown"
+                Mouse.MouseUp="OverlayFloating_MouseUp"
+                >
+          <Path Fill="Green" Opacity="0.3">
+            <Path.Data>
+              <CombinedGeometry GeometryCombineMode="Exclude">
+                <CombinedGeometry.Geometry1>
+                  <RectangleGeometry Rect="66,70,264,396"/>
+                </CombinedGeometry.Geometry1>
+                <CombinedGeometry.Geometry2>
+                  <RectangleGeometry Rect="108,100,180,336"/>
+                </CombinedGeometry.Geometry2>
+              </CombinedGeometry>
+            </Path.Data>
+          </Path>
+          <!--
+          <Rectangle Width="264" Height="396" Canvas.Left="66" Canvas.Top="70" Fill="Yellow" Opacity="0.3" />
+          <Rectangle Width="180" Height="336" Canvas.Left="108" Canvas.Top="92" Fill="Purple" Opacity="0.3" />
+          -->
+          </Canvas>
+      </Canvas>
     </Grid>
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="1*"/>
+        <ColumnDefinition Width="10*"/>
+      </Grid.ColumnDefinitions>
+      <!--
+      <Label Grid.Column="0" x:Name="DebugLabel1"  Content="X" />
+      <Label Grid.Column="1" x:Name="DebugLabel2"  Content="Y" />
+      -->
+    </Grid>
+  </Grid>
 </Window>
