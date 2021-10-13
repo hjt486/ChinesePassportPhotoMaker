@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,6 +48,7 @@ namespace ChinesePassportPhotoMaker
     private double _imageViewHeight = 831;
     private double _overlayFloatingUpperLimit= 36;
     private double _overlayFloatingLowerLimit = 96;
+    private int _jpegCompressFactor = 85;
 
     public MainWindow()
     {
@@ -98,6 +100,69 @@ namespace ChinesePassportPhotoMaker
       ImageViewer.Height = _imageViewerControl.ImageHeight;
       Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
       Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
+    }
+
+    /*
+     * To resize the rendered bitmap
+     * This is from:
+     * https://stackoverflow.com/questions/15779564/resize-image-in-wpf/24419190
+     */
+    private BitmapFrame CreateResizedImage(ImageSource source, int width, int height, int margin)
+    {
+      var rect = new Rect(margin, margin, width - margin * 2, height - margin * 2);
+
+      var group = new DrawingGroup();
+      RenderOptions.SetBitmapScalingMode(group, BitmapScalingMode.HighQuality);
+      group.Children.Add(new ImageDrawing(source, rect));
+
+      var drawingVisual = new DrawingVisual();
+      using (var drawingContext = drawingVisual.RenderOpen())
+        drawingContext.DrawDrawing(group);
+
+      var resizedImage = new RenderTargetBitmap(
+          width, height,         // Resized dimensions
+          96, 96,                // Default DPI values
+          PixelFormats.Default); // Default pixel format
+      resizedImage.Render(drawingVisual);
+
+      return BitmapFrame.Create(resizedImage);
+    }
+    /*
+     *  Idea is to pull the Canvas
+     *  that holds user-edited image,
+     *  Render as image and save to file
+     *  (Like an automatic screenshot)
+     */
+    private void SaveImageFromCanvasToFile()
+    {
+      Transform transform = ImageCanvas.LayoutTransform;
+      ImageCanvas.LayoutTransform = null;
+      Size size = new Size(ImageCanvas.Width, ImageCanvas.Height);
+      ImageCanvas.Measure(size);
+      ImageCanvas.Arrange(new Rect(size));
+
+      RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96d, 96d, PixelFormats.Pbgra32);
+      renderBitmap.Render(ImageOnlyCanvas);
+      ImageSource im = (ImageSource)renderBitmap.Clone();
+      BitmapFrame bp = CreateResizedImage(im, 396, 576, 0); // Around 300 DPI
+
+      SaveFileDialog saveFileDialog = new SaveFileDialog();
+      saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+      saveFileDialog.Filter =
+        "Jpeg文件|" +
+        "*.jpg";
+      if (saveFileDialog.ShowDialog() == true)
+      {
+        using (FileStream outStream = new FileStream(saveFileDialog.FileName, FileMode.Create))
+        {
+
+          JpegBitmapEncoder encoder = new JpegBitmapEncoder();
+          encoder.QualityLevel = _jpegCompressFactor;
+          encoder.Frames.Add(bp);
+          encoder.Save(outStream);
+        }
+      }
+      ImageOnlyCanvas.LayoutTransform = transform;
     }
     /*
      * UI related events here
@@ -255,6 +320,16 @@ namespace ChinesePassportPhotoMaker
         SwitchToLoadedImage();
         ShowExampleCheckBox.IsChecked = false;
       }
+    }
+
+    private void SaveFileButton_Click(object sender, RoutedEventArgs e)
+    {
+      SaveImageFromCanvasToFile();
+    }
+
+    private void jpegCompressRatioTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+      int.TryParse(jpegCompressRatioTextBox.Text, out _jpegCompressFactor);
     }
   }
 }

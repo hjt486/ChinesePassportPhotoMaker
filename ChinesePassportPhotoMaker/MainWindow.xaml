@@ -48,14 +48,29 @@
             <Grid.ColumnDefinitions>
               <ColumnDefinition Width="2*"/>
               <ColumnDefinition Width="1*"/>
-              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="3*"/>
               <ColumnDefinition Width="1*"/>
-              <ColumnDefinition Width="4*"/>
+              <ColumnDefinition Width="3*"/>
               <ColumnDefinition Width="1*"/>
               <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="OpenFileButton" Click="OpenFileButton_Click">打开照片</Button>
-            <Button Grid.Column="2">保存照片</Button>
+            <Grid Grid.Column="2">
+              <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+              </Grid.RowDefinitions>
+              <Button Grid.Row="0" x:Name="SaveFileButton" Click="SaveFileButton_Click">保存照片</Button>
+              <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0">压缩系数:</Label>
+                <TextBox Grid.Column="1" Height="18" MinWidth="30" TextAlignment="Right" VerticalAlignment="Center"
+                         x:Name="jpegCompressRatioTextBox" TextChanged="jpegCompressRatioTextBox_TextChanged">85</TextBox>
+              </Grid>
+            </Grid>
             <WrapPanel Grid.Column="4" VerticalAlignment="Center">
               <CheckBox x:Name="ShowGuidesCheckBox" Checked="ShowGuidesCheckBox_Checked" Unchecked="ShowGuidesCheckBox_Unchecked" IsChecked="True">显示辅助线</CheckBox>
               <CheckBox x:Name="ShowHelpersCheckBox" Checked="ShowHelpersCheckBox_Checked" Unchecked="ShowHelpersCheckBox_Unchecked" IsChecked="True">显示说明</CheckBox>
@@ -83,11 +98,12 @@
           <Canvas x:Name="ImageCanvas"
                   Width="{StaticResource PhotoWidth}"
                   Height="{StaticResource PhotoHeight}"
-                  Background="Gray" ClipToBounds="True"
+                  Background="White" ClipToBounds="True"
                   Mouse.MouseWheel="ImageViewer_MouseWheel"
                   Mouse.MouseMove="ImageOrOverlay_MouseMove"
                   Mouse.MouseUp="ImageViewer_MouseUp">
-            <Image
+            <Canvas Name="ImageOnlyCanvas">
+              <Image
               x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
               Margin="0,0,0,0"
               Canvas.Top="-53" Canvas.Left="-115"
@@ -97,6 +113,7 @@
               Mouse.MouseDown="ImageViewer_MouseDown"
               Source="/ChinesePassportPhotoMaker;component/Resources/Example.png"
               ClipToBounds="False"/>
+            </Canvas>
             <Canvas Name="OverlayFixed">
               <Rectangle Width="{StaticResource PhotoWidth}" Height="36" Canvas.Left="0" Canvas.Top="0" Fill="Red" Opacity="0.3" />
               <Rectangle Width="198" Height="24" Canvas.Left="99" Canvas.Top="36" Fill="Yellow" Opacity="0.3" />
