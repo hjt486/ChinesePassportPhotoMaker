@@ -12,6 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+/*
+ * Todos
+ * 让绿色方框无法移动过红色区域
+ */
 
 namespace ChinesePassportPhotoMaker
 {

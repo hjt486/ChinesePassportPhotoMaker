@@ -181,11 +181,11 @@
             </Border>
             <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="150" Background="GreenYellow">
               <TextBlock>
-                请将黄色参考线对其鼻尖使照片居中
+                请将黄色参考线对齐鼻尖使照片居中
                 <LineBreak/>
                 使用鼠标点击照片并拖拽来移动照片
                 <LineBreak/>
-                滚动鼠标滚轮可缩放照片
+                滚动鼠标滚轮来缩放照片
               </TextBlock>
             </Border>
           </Canvas>
