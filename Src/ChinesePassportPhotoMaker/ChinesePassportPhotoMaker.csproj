@@ -6,6 +6,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>..\..\build</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Resources\Example.png" />
   </ItemGroup>
