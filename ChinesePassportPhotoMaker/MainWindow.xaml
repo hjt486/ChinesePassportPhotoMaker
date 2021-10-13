@@ -18,6 +18,19 @@
       <Setter Property="Margin" Value="10, 2, 10, 2" />
       <Setter Property="Padding" Value="0" />
     </Style>
+    <Style x:Key="HelperBlock" TargetType="Border">
+      <Setter Property="Background" Value="LightBlue"/>
+      <Setter Property="Padding" Value="6"/>
+      <Setter Property="CornerRadius" Value="2"/>
+      <Setter Property="VerticalAlignment" Value="Center"/>
+      <Setter Property="HorizontalAlignment" Value="Center"/>
+      <Setter Property="BorderThickness" Value="1"/>
+      <Setter Property="BorderBrush" Value="DarkGray"/>
+    </Style>
+    <Style x:Key="HelperPointer" TargetType="Line">
+      <Setter Property="Stroke" Value="DarkGray"/>
+      <Setter Property="StrokeThickness" Value="5"/>
+    </Style>
   </Window.Resources>
   <Grid>
     <Grid.RowDefinitions>
@@ -44,16 +57,16 @@
             <Button Grid.Column="0">打开照片</Button>
             <Button Grid.Column="2">保存照片</Button>
             <WrapPanel Grid.Column="4" VerticalAlignment="Center">
-              <CheckBox Grid.Column="2">显示辅助线</CheckBox>
-              <CheckBox Grid.Column="2">显示说明</CheckBox>
-              <CheckBox Grid.Column="2">显示示例</CheckBox>
+              <CheckBox x:Name="ShowGuidesCheckBox" Checked="ShowGuidesCheckBox_Checked" Unchecked="ShowGuidesCheckBox_Unchecked" IsChecked="True">显示辅助线</CheckBox>
+              <CheckBox x:Name="ShowHelpersCheckBox" Checked="ShowHelpersCheckBox_Checked" Unchecked="ShowHelpersCheckBox_Unchecked" IsChecked="True">显示说明</CheckBox>
+              <CheckBox x:Name="ShowExampleCheckBox" Checked="ShowExampleCheckBox_Checked" Unchecked="ShowExampleCheckBox_Unchecked" IsChecked="True">显示示例</CheckBox>
             </WrapPanel>
             <Button Grid.Column="6">关于</Button>
           </Grid>
           <TextBlock TextWrapping="Wrap">
               当前版本：2021-10-12；使用前，请您再次确认
               <Hyperlink NavigateUri="https://ppt.mfa.gov.cn/appo/page/instruction.html">
-                最新标准</Hyperlink>。
+                最新护照照片标准</Hyperlink>。
           </TextBlock>
         </StackPanel>
       </Border>
@@ -62,56 +75,121 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="1*"/>
       </Grid.ColumnDefinitions>
-
       <Border Grid.Column="0"
                 Width="{StaticResource PhotoBoderWidth}"
                 Height="{StaticResource PhotoBoderHeight}"
                 Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="5">
-        <Canvas x:Name="ImageCanvas"
+        <Grid>
+          <Canvas x:Name="ImageCanvas"
                   Width="{StaticResource PhotoWidth}"
                   Height="{StaticResource PhotoHeight}"
                   Background="Gray" ClipToBounds="True"
                   Mouse.MouseWheel="ImageViewer_MouseWheel"
                   Mouse.MouseMove="ImageOrOverlay_MouseMove">
-          <Image
+            <Image
               x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
               Margin="0,0,0,0"
-              Canvas.Top="0" Canvas.Left="0"
-              Width="600"
-              Height="800"
+              Canvas.Top="-53" Canvas.Left="-115"
+              Width="623.25"
+              Height="831"
               Stretch="Fill"
               Mouse.MouseDown="ImageViewer_MouseDown"
               Mouse.MouseUp="ImageViewer_MouseUp"
               Source="/ChinesePassportPhotoMaker;component/Resources/Example.png"
               ClipToBounds="False"/>
-          <Canvas Name="OverlayFixed">
-            <Rectangle Width="{StaticResource PhotoWidth}" Height="36" Canvas.Left="0" Canvas.Top="0" Fill="Red" Opacity="0.3" />
-            <Rectangle Width="198" Height="24" Canvas.Left="99" Canvas.Top="36" Fill="Green" Opacity="0.3" />
-            <Rectangle Width="{StaticResource PhotoWidth}" Height="84" Canvas.Left="0" Canvas.Top="492" Fill="Red" Opacity="0.3" />
-            <Line StrokeThickness="2" X1="198" Y1="0" X2="198" Y2="{StaticResource PhotoHeight}" Canvas.Left="0" Canvas.Top="0" Stroke="Yellow" Opacity="0.3" />
-          </Canvas>
-          <Canvas Name="OverlayFloating"
+            <Canvas Name="OverlayFixed">
+              <Rectangle Width="{StaticResource PhotoWidth}" Height="36" Canvas.Left="0" Canvas.Top="0" Fill="Red" Opacity="0.3" />
+              <Rectangle Width="198" Height="24" Canvas.Left="99" Canvas.Top="36" Fill="Yellow" Opacity="0.3" />
+              <Rectangle Width="{StaticResource PhotoWidth}" Height="84" Canvas.Left="0" Canvas.Top="492" Fill="Red" Opacity="0.3" />
+              <Line StrokeThickness="2" X1="198" Y1="0" X2="198" Y2="{StaticResource PhotoHeight}" Canvas.Left="0" Canvas.Top="0" Stroke="Yellow" Opacity="0.3" />
+            </Canvas>
+            <Canvas Name="OverlayFloating"
                     Mouse.MouseDown="OverlayFloating_MouseDown"
                     Mouse.MouseUp="OverlayFloating_MouseUp"
+                    Canvas.Left="66"
+                    Canvas.Top="45"
                     >
-            <Path Fill="Green" Opacity="0.3">
-              <Path.Data>
-                <CombinedGeometry GeometryCombineMode="Exclude">
-                  <CombinedGeometry.Geometry1>
-                    <RectangleGeometry Rect="66,70,264,396"/>
-                  </CombinedGeometry.Geometry1>
-                  <CombinedGeometry.Geometry2>
-                    <RectangleGeometry Rect="108,100,180,336"/>
-                  </CombinedGeometry.Geometry2>
-                </CombinedGeometry>
-              </Path.Data>
-            </Path>
-            <!--
+              <Path Fill="Green" Opacity="0.3">
+                <Path.Data>
+                  <CombinedGeometry GeometryCombineMode="Exclude">
+                    <CombinedGeometry.Geometry1>
+                      <RectangleGeometry Rect="0,0,264,396"/>
+                    </CombinedGeometry.Geometry1>
+                    <CombinedGeometry.Geometry2>
+                      <RectangleGeometry Rect="42,30,180,336"/>
+                    </CombinedGeometry.Geometry2>
+                  </CombinedGeometry>
+                </Path.Data>
+              </Path>
+              <!--
               <Rectangle Width="264" Height="396" Canvas.Left="66" Canvas.Top="70" Fill="Yellow" Opacity="0.3" />
               <Rectangle Width="180" Height="336" Canvas.Left="108" Canvas.Top="92" Fill="Purple" Opacity="0.3" />
               -->
+            </Canvas>
           </Canvas>
-        </Canvas>
+          <Canvas x:Name="Helpers">
+            <Line Style="{StaticResource HelperPointer}" X1="40" Y1="30" X2="130" Y2="16"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="20" Canvas.Left="10">
+              <TextBlock>
+                头部不能落在
+                <LineBreak/>
+                此红色区域
+              </TextBlock>
+            </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="270" Y1="30" X2="200" Y2="50"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="5" Canvas.Left="255">
+              <TextBlock>
+                头部上沿必须
+                <LineBreak/>
+                在此黄色区域
+              </TextBlock>
+            </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="40" Y1="450" X2="88" Y2="275"/>
+            <Line Style="{StaticResource HelperPointer}" X1="40" Y1="450" X2="304" Y2="275"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="420" Canvas.Left="10">
+              <TextBlock>
+                脸部边缘必须
+                <LineBreak/>
+                在此绿色区域
+                <LineBreak/>
+                （不含耳朵）
+              </TextBlock>
+            </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="360" Y1="475" X2="200" Y2="430"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="460" Canvas.Left="305">
+              <TextBlock>
+                下巴下沿必须
+                <LineBreak/>
+                在此绿色区域
+              </TextBlock>
+            </Border>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="10">
+              <TextBlock>
+                下巴不能落在
+                <LineBreak/>
+                此红色区域
+              </TextBlock>
+            </Border>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="210" Canvas.Left="315" Background="GreenYellow">
+              <TextBlock>
+                点击拖拽
+                <LineBreak/>
+                可上下移动
+                <LineBreak/>
+                此绿色方框
+              </TextBlock>
+            </Border>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="150" Background="GreenYellow">
+              <TextBlock>
+                请将黄色参考线对其鼻尖使照片居中
+                <LineBreak/>
+                使用鼠标点击照片并拖拽来移动照片
+                <LineBreak/>
+                滚动鼠标滚轮可缩放照片
+              </TextBlock>
+            </Border>
+          </Canvas>
+        </Grid>
       </Border>
     </Grid>
     <Grid Grid.Row="2">

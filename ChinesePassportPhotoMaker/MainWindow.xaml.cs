@@ -20,12 +20,17 @@ namespace ChinesePassportPhotoMaker
   /// </summary>
   public partial class MainWindow : Window
   {
-    private ObjectManipulationControl _imageViewerControl = new ObjectManipulationControl();
-    private ObjectManipulationControl _overlayFloatingViewerControl = new ObjectManipulationControl();
+    private ObjectManipulationControl _imageViewerControl = new ObjectManipulationControl(0, 0);
+    private ObjectManipulationControl _exampleImageViewerControl = new ObjectManipulationControl(0,0);
+    private ObjectManipulationControl _overlayFloatingViewerControl = new ObjectManipulationControl(0, 0);
 
     public MainWindow()
     {
       InitializeComponent();
+      ShowGuidesCheckBox.IsChecked = true;
+      ShowHelpersCheckBox.IsChecked = true;
+      ShowExampleCheckBox.IsChecked = true;
+      UseExamplePhoto();
     }
 
     private void ImageViewer_MouseDown(object sender, MouseButtonEventArgs e)
@@ -89,7 +94,79 @@ namespace ChinesePassportPhotoMaker
     {
       _overlayFloatingViewerControl.SetCoordsMouseUpY();
       _overlayFloatingViewerControl.IsSelected = false;
-    } 
+    }
 
+    private void ShowGuidesCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+      if (OverlayFloating != null)
+      {
+        OverlayFloating.Visibility = Visibility.Visible;
+      }
+      if (OverlayFixed != null)
+      {
+        OverlayFixed.Visibility = Visibility.Visible;
+      }
+    }
+
+    private void ShowGuidesCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+      if (OverlayFloating != null)
+      {
+        OverlayFloating.Visibility = Visibility.Collapsed;
+      }
+      if (OverlayFixed != null)
+      {
+        OverlayFixed.Visibility = Visibility.Collapsed;
+      }
+    }
+
+    private void ShowHelpersCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+      if (Helpers != null)
+      {
+        Helpers.Visibility = Visibility.Visible;
+      }
+    }
+
+    private void ShowHelpersCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+      if(Helpers != null)
+      {
+        Helpers.Visibility = Visibility.Collapsed;
+      }
+    }
+
+    private void ShowExampleCheckBox_Checked(object sender, RoutedEventArgs e)
+    {
+      UseExamplePhoto();
+    }
+
+    private void ShowExampleCheckBox_Unchecked(object sender, RoutedEventArgs e)
+    {
+
+    }
+
+    private void UseExamplePhoto()
+    {
+      if (ImageViewer != null)
+      {
+        _exampleImageViewerControl = new ObjectManipulationControl(-115, -53);
+        _exampleImageViewerControl.SetImageWHR(623.25, 831, 0.75);
+        ImageViewer.Source = new BitmapImage(new Uri(@"/ChinesePassportPhotoMaker;component/Resources/Example.png", UriKind.Relative));
+        ImageViewer.Width = _exampleImageViewerControl.ImageWidth;
+        ImageViewer.Height = _exampleImageViewerControl.ImageHeight;
+        _imageViewerControl = _exampleImageViewerControl;
+        _imageViewerControl.ResetToDefaultXY();
+        Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
+        Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
+      }
+      if (OverlayFloating != null)
+      {
+        _overlayFloatingViewerControl = new ObjectManipulationControl(66, 45);
+        _overlayFloatingViewerControl.ResetToDefaultXY();
+        Canvas.SetLeft(OverlayFloating, _overlayFloatingViewerControl.GetCoordsX());
+        Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
+      }
+    }
   }
 }

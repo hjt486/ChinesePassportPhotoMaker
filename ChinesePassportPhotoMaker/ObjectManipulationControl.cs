@@ -8,6 +8,8 @@ namespace ChinesePassportPhotoMaker
   {
     private double _canvasX = 0;
     private double _canvasY = 0;
+    private double _defaultCanvasX = 0;
+    private double _defaultCanvasY = 0;
     private double _coordMouseDownX = 0;
     private double _coordMouseDownY = 0;
     private double _coordMouseInMovingX = 0;
@@ -16,6 +18,28 @@ namespace ChinesePassportPhotoMaker
     private double _imageHeight = 800;
     private double _imageWidthByHeightRatio = 0.75;
     private bool _isSelected = false;
+    public ObjectManipulationControl(double x, double y)
+    {
+      _defaultCanvasX = x;
+      _defaultCanvasY = y;
+      ResetToDefaultXY();
+    }
+    public void SetImageWHR(double width, double height, double ratio)
+    {
+      _imageWidth = width;
+      _imageHeight = height;
+      _imageWidthByHeightRatio = ratio;
+    }
+    public double CanvasX
+    {
+      get { return _canvasX; }
+      set { _canvasX = value; }
+    }
+    public double CanvasY
+    {
+      get { return _canvasY; }
+      set { _canvasY = value; }
+    }
     public double ImageWidth
     {
       get { return _imageWidth; }
@@ -55,6 +79,16 @@ namespace ChinesePassportPhotoMaker
     {
       get { return _isSelected; }
       set { _isSelected = value; }
+    }
+
+    public void ResetToDefaultXY()
+    {
+      _canvasX = _defaultCanvasX;
+      _canvasY = _defaultCanvasY;
+      _coordMouseDownX = 0;
+      _coordMouseDownY = 0;
+      _coordMouseInMovingX = 0;
+      _coordMouseInMovingY = 0;
     }
     public void SetCoordsMouseDown(double xCoord, double yCoord)
     {
