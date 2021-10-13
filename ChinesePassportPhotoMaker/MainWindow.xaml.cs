@@ -89,6 +89,7 @@ namespace ChinesePassportPhotoMaker
     {
       _overlayFloatingViewerControl.SetCoordsMouseUpY();
       _overlayFloatingViewerControl.IsSelected = false;
-    }
+    } 
+
   }
 }
