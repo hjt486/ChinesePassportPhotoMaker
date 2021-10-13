@@ -25,13 +25,29 @@ namespace ChinesePassportPhotoMaker
   /// </summary>
   public partial class MainWindow : Window
   {
+    /*
+     *  ObjectManipulationControl objects here, this object type is to track position,
+     *  providing scaling/moving function, also acts as image info tracker
+     *  
+     *  Ideas here is,
+     *  _imageViewerControl is the main control, that ImageViewer object in XAML pointed to
+     *  _overlayFloatingViewerControl is to control the floating overlay
+     *  _loadedImageViewerControl keeps user loaded image info
+     *  _exampleImageViewerControl keeps original example image info
+     *  
+     *  When user loads a image, or switch between example to their own photo
+     *  _imageViewerControl will act as a pointer pointing to one of them
+     *  
+     */
     private ObjectManipulationControl _imageViewerControl = new ObjectManipulationControl(0, 0);
     private ObjectManipulationControl _exampleImageViewerControl = new ObjectManipulationControl(0,0);
     private ObjectManipulationControl _loadedImageViewerControl = new ObjectManipulationControl(0, 0);
     private ObjectManipulationControl _overlayFloatingViewerControl = new ObjectManipulationControl(0, 0);
     private double _imageViewWidth = 623.25;
     private double _imageViewHeight = 831;
-    
+    private double _overlayFloatingUpperLimit= 36;
+    private double _overlayFloatingLowerLimit = 96;
+
     public MainWindow()
     {
       InitializeComponent();
@@ -51,13 +67,7 @@ namespace ChinesePassportPhotoMaker
         _exampleImageViewerControl = new ObjectManipulationControl(-115, -53);
         _exampleImageViewerControl.Image = new BitmapImage(new Uri("pack://application:,,,/ChinesePassportPhotoMaker;component/Resources/Example.png", UriKind.RelativeOrAbsolute));
         _exampleImageViewerControl.SetImageWidthHeight(_imageViewWidth, _imageViewHeight);
-        ImageViewer.Source = _exampleImageViewerControl.Image;
-        ImageViewer.Width = _exampleImageViewerControl.ImageWidth;
-        ImageViewer.Height = _exampleImageViewerControl.ImageHeight;
-        _imageViewerControl = _exampleImageViewerControl;
-        _imageViewerControl.ResetToDefaultXY();
-        Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
-        Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
+        SwitchToExampleImage();
       }
       if (OverlayFloating != null)
       {
@@ -66,6 +76,28 @@ namespace ChinesePassportPhotoMaker
         Canvas.SetLeft(OverlayFloating, _overlayFloatingViewerControl.GetCoordsX());
         Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
       }
+    }
+
+    private void SwitchToLoadedImage()
+    {
+      _imageViewerControl = _loadedImageViewerControl;
+      RefreshImageViewer();
+    }
+
+    private void SwitchToExampleImage()
+    {
+      _imageViewerControl = _exampleImageViewerControl;
+      _imageViewerControl.ResetToDefaultXY();
+      RefreshImageViewer();
+    }
+
+    private void RefreshImageViewer()
+    {
+      ImageViewer.Source = _imageViewerControl.Image;
+      ImageViewer.Width = _imageViewerControl.ImageWidth;
+      ImageViewer.Height = _imageViewerControl.ImageHeight;
+      Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
+      Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
     }
     /*
      * UI related events here
@@ -82,14 +114,19 @@ namespace ChinesePassportPhotoMaker
 
     private void ImageViewer_MouseUp(object sender, MouseButtonEventArgs e)
     {
-      _imageViewerControl.SetCoordsMouseUp();
-      //DebugLabel1.Content = Mouse.GetPosition(Application.Current.MainWindow).X.ToString();
-      //DebugLabel2.Content = Mouse.GetPosition(Application.Current.MainWindow).Y.ToString();
-      _imageViewerControl.IsSelected = false;
+      if (_imageViewerControl.IsSelected)
+      {
+        _imageViewerControl.SetCoordsMouseUp();
+        //DebugLabel3.Content = Mouse.GetPosition(Application.Current.MainWindow).X.ToString();
+        //DebugLabel4.Content = Mouse.GetPosition(Application.Current.MainWindow).Y.ToString();
+        _imageViewerControl.IsSelected = false;
+      }
     }
 
     private void ImageOrOverlay_MouseMove(object sender, MouseEventArgs e)
     {
+      //DebugLabel5.Content = Mouse.GetPosition(Application.Current.MainWindow).X.ToString();
+      //DebugLabel6.Content = Mouse.GetPosition(Application.Current.MainWindow).Y.ToString();
       if (_imageViewerControl.IsSelected && e.LeftButton == MouseButtonState.Pressed)
       {
         _imageViewerControl.SetCoordsMouseInMoving(
@@ -97,13 +134,22 @@ namespace ChinesePassportPhotoMaker
         Mouse.GetPosition(Application.Current.MainWindow).Y);
         Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
         Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
-        //DebugLabel1.Content = Mouse.GetPosition(Application.Current.MainWindow).X.ToString();
-        //DebugLabel2.Content = Mouse.GetPosition(Application.Current.MainWindow).Y.ToString();
       }
       else if (_overlayFloatingViewerControl.IsSelected && e.LeftButton == MouseButtonState.Pressed)
       {
+        double CurrentY = _overlayFloatingViewerControl.CanvasY +
+          _overlayFloatingViewerControl.CoordMouseInMovingY -
+          _overlayFloatingViewerControl.CoordMouseDownY;
         _overlayFloatingViewerControl.CoordMouseInMovingY = Mouse.GetPosition(Application.Current.MainWindow).Y;
-        Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
+        CurrentY = _overlayFloatingViewerControl.GetCoordsY();
+        if (CurrentY > _overlayFloatingUpperLimit && CurrentY < _overlayFloatingLowerLimit)
+        {
+          Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
+        }
+        if (CurrentY <= _overlayFloatingUpperLimit)
+          _overlayFloatingViewerControl.CanvasY = _overlayFloatingUpperLimit;
+        if (CurrentY >= _overlayFloatingLowerLimit)
+          _overlayFloatingViewerControl.CanvasY = _overlayFloatingLowerLimit;
       }
     }
 
@@ -129,8 +175,11 @@ namespace ChinesePassportPhotoMaker
 
     private void OverlayFloating_MouseUp(object sender, MouseButtonEventArgs e)
     {
-      _overlayFloatingViewerControl.SetCoordsMouseUpY();
-      _overlayFloatingViewerControl.IsSelected = false;
+      if (_overlayFloatingViewerControl.IsSelected)
+      {
+        _overlayFloatingViewerControl.SetCoordsMouseUpY();
+        _overlayFloatingViewerControl.IsSelected = false;
+      }
     }
 
     private void ShowGuidesCheckBox_Checked(object sender, RoutedEventArgs e)
@@ -180,6 +229,10 @@ namespace ChinesePassportPhotoMaker
 
     private void ShowExampleCheckBox_Unchecked(object sender, RoutedEventArgs e)
     {
+      if (_loadedImageViewerControl.Image != null)
+      {
+        SwitchToLoadedImage();
+      }
 
     }
 
@@ -199,12 +252,9 @@ namespace ChinesePassportPhotoMaker
           new Uri(openFileDialog.FileName, 
           UriKind.Absolute));
         _loadedImageViewerControl.SetImageWidthHeight(_imageViewWidth, _imageViewHeight);
-        ImageViewer.Source = _loadedImageViewerControl.Image;
-        ImageViewer.Width = _loadedImageViewerControl.ImageWidth;
-        ImageViewer.Height = _loadedImageViewerControl.ImageHeight;
-        _imageViewerControl = _loadedImageViewerControl;
+        SwitchToLoadedImage();
+        ShowExampleCheckBox.IsChecked = false;
       }
-
     }
   }
 }

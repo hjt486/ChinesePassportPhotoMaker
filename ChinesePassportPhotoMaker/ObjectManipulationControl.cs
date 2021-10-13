@@ -24,7 +24,7 @@ namespace ChinesePassportPhotoMaker
     private double _coordMouseInMovingY = 0; // ... Y ...
     private double _imageWidth = 600; // To track image width for zooming
     private double _imageHeight = 800; // ... height ...
-    private BitmapImage _image;
+    private BitmapImage _image; // Image file info is stored here, including original WxH, path etc.
     private bool _isSelected = false; // WPF can't differentiate which object is on focus when moving, use this as fix
     
     /*
@@ -106,6 +106,16 @@ namespace ChinesePassportPhotoMaker
       _coordMouseInMovingY = 0;
     }
     /*
+     * Reset only mouse
+     */
+    public void ResetToMouse()
+    {
+      _coordMouseDownX = 0;
+      _coordMouseDownY = 0;
+      _coordMouseInMovingX = 0;
+      _coordMouseInMovingY = 0;
+    }
+    /*
      * Tracking coordinates when mouse is pressed
      */
     public void SetCoordsMouseDown(double xCoord, double yCoord)
@@ -168,7 +178,13 @@ namespace ChinesePassportPhotoMaker
       _imageWidth = _imageWidth * (100 + pointDeltaPercent) / 100;
       _imageHeight = _imageWidth / ((double)_image.PixelWidth / (double)_image.PixelHeight);
     }
-
+    /*
+     * Kinda like a auto-scaled keeping original WH ratio
+     * the givingWidth and givingHeight is ideal W and H
+     * then it calculates the correct width/height for display (after scaled)
+     * e.g. giving the display area is 400x300, giving a new image is 500 x 200
+     * the image will be scaled to 750 * 300, in-order to fill and keep ratio
+     */
     public void SetImageWidthHeight(double givingWidth, double givingHeight)
     {
       double wRatio = givingWidth / (double)_image.PixelWidth;

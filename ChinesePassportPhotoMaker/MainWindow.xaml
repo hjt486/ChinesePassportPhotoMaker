@@ -85,7 +85,8 @@
                   Height="{StaticResource PhotoHeight}"
                   Background="Gray" ClipToBounds="True"
                   Mouse.MouseWheel="ImageViewer_MouseWheel"
-                  Mouse.MouseMove="ImageOrOverlay_MouseMove">
+                  Mouse.MouseMove="ImageOrOverlay_MouseMove"
+                  Mouse.MouseUp="ImageViewer_MouseUp">
             <Image
               x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
               Margin="0,0,0,0"
@@ -94,7 +95,6 @@
               Height="831"
               Stretch="Fill"
               Mouse.MouseDown="ImageViewer_MouseDown"
-              Mouse.MouseUp="ImageViewer_MouseUp"
               Source="/ChinesePassportPhotoMaker;component/Resources/Example.png"
               ClipToBounds="False"/>
             <Canvas Name="OverlayFixed">
@@ -193,15 +193,16 @@
       </Border>
     </Grid>
     <Grid Grid.Row="2">
-      <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="1*"/>
-        <ColumnDefinition Width="1*"/>
-        <ColumnDefinition Width="10*"/>
-      </Grid.ColumnDefinitions>
-      <!--
-      <Label Grid.Column="0" x:Name="DebugLabel1"  Content="X" />
-      <Label Grid.Column="1" x:Name="DebugLabel2"  Content="Y" />
-      -->
+      <WrapPanel>
+        <!--
+        <Label Grid.Column="0" x:Name="DebugLabel1"  Content="X" />
+        <Label Grid.Column="1" x:Name="DebugLabel2"  Content="Y" />
+        <Label Grid.Column="1" x:Name="DebugLabel3"  Content="X" />
+        <Label Grid.Column="1" x:Name="DebugLabel4"  Content="Y" />
+        <Label Grid.Column="1" x:Name="DebugLabel5"  Content="X" />
+        <Label Grid.Column="1" x:Name="DebugLabel6"  Content="Y" />
+        -->
+      </WrapPanel>
     </Grid>
   </Grid>
 </Window>
