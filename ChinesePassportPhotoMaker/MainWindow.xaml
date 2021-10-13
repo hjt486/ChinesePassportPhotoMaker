@@ -54,7 +54,7 @@
               <ColumnDefinition Width="1*"/>
               <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0">打开照片</Button>
+            <Button Grid.Column="0" x:Name="OpenFileButton" Click="OpenFileButton_Click">打开照片</Button>
             <Button Grid.Column="2">保存照片</Button>
             <WrapPanel Grid.Column="4" VerticalAlignment="Center">
               <CheckBox x:Name="ShowGuidesCheckBox" Checked="ShowGuidesCheckBox_Checked" Unchecked="ShowGuidesCheckBox_Unchecked" IsChecked="True">显示辅助线</CheckBox>

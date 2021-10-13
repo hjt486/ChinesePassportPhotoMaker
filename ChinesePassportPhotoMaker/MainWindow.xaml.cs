@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,8 +27,11 @@ namespace ChinesePassportPhotoMaker
   {
     private ObjectManipulationControl _imageViewerControl = new ObjectManipulationControl(0, 0);
     private ObjectManipulationControl _exampleImageViewerControl = new ObjectManipulationControl(0,0);
+    private ObjectManipulationControl _loadedImageViewerControl = new ObjectManipulationControl(0, 0);
     private ObjectManipulationControl _overlayFloatingViewerControl = new ObjectManipulationControl(0, 0);
-
+    private double _imageViewWidth = 623.25;
+    private double _imageViewHeight = 831;
+    
     public MainWindow()
     {
       InitializeComponent();
@@ -37,6 +41,35 @@ namespace ChinesePassportPhotoMaker
       UseExamplePhoto();
     }
 
+    /*
+     * Custom methods here
+     */
+    private void UseExamplePhoto()
+    {
+      if (ImageViewer != null)
+      {
+        _exampleImageViewerControl = new ObjectManipulationControl(-115, -53);
+        _exampleImageViewerControl.Image = new BitmapImage(new Uri("pack://application:,,,/ChinesePassportPhotoMaker;component/Resources/Example.png", UriKind.RelativeOrAbsolute));
+        _exampleImageViewerControl.SetImageWidthHeight(_imageViewWidth, _imageViewHeight);
+        ImageViewer.Source = _exampleImageViewerControl.Image;
+        ImageViewer.Width = _exampleImageViewerControl.ImageWidth;
+        ImageViewer.Height = _exampleImageViewerControl.ImageHeight;
+        _imageViewerControl = _exampleImageViewerControl;
+        _imageViewerControl.ResetToDefaultXY();
+        Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
+        Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
+      }
+      if (OverlayFloating != null)
+      {
+        _overlayFloatingViewerControl = new ObjectManipulationControl(66, 45);
+        _overlayFloatingViewerControl.ResetToDefaultXY();
+        Canvas.SetLeft(OverlayFloating, _overlayFloatingViewerControl.GetCoordsX());
+        Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
+      }
+    }
+    /*
+     * UI related events here
+     */
     private void ImageViewer_MouseDown(object sender, MouseButtonEventArgs e)
     {
       _imageViewerControl.IsSelected = true;
@@ -150,27 +183,28 @@ namespace ChinesePassportPhotoMaker
 
     }
 
-    private void UseExamplePhoto()
+    private void OpenFileButton_Click(object sender, RoutedEventArgs e)
     {
-      if (ImageViewer != null)
+      OpenFileDialog openFileDialog = new OpenFileDialog();
+      openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+      openFileDialog.Filter =
+        "图片文件|" +
+        "*.bmp;*.tif;*.tif;*.png;*.jpg;*.jpeg;|" +
+        "所有文件 (*.*)|" +
+        "*.*";
+      if (openFileDialog.ShowDialog() == true)
       {
-        _exampleImageViewerControl = new ObjectManipulationControl(-115, -53);
-        _exampleImageViewerControl.SetImageWHR(623.25, 831, 0.75);
-        ImageViewer.Source = new BitmapImage(new Uri(@"/ChinesePassportPhotoMaker;component/Resources/Example.png", UriKind.Relative));
-        ImageViewer.Width = _exampleImageViewerControl.ImageWidth;
-        ImageViewer.Height = _exampleImageViewerControl.ImageHeight;
-        _imageViewerControl = _exampleImageViewerControl;
-        _imageViewerControl.ResetToDefaultXY();
-        Canvas.SetLeft(ImageViewer, _imageViewerControl.GetCoordsX());
-        Canvas.SetTop(ImageViewer, _imageViewerControl.GetCoordsY());
+        _loadedImageViewerControl = new ObjectManipulationControl(0, 0);
+        _loadedImageViewerControl.Image = new BitmapImage(
+          new Uri(openFileDialog.FileName, 
+          UriKind.Absolute));
+        _loadedImageViewerControl.SetImageWidthHeight(_imageViewWidth, _imageViewHeight);
+        ImageViewer.Source = _loadedImageViewerControl.Image;
+        ImageViewer.Width = _loadedImageViewerControl.ImageWidth;
+        ImageViewer.Height = _loadedImageViewerControl.ImageHeight;
+        _imageViewerControl = _loadedImageViewerControl;
       }
-      if (OverlayFloating != null)
-      {
-        _overlayFloatingViewerControl = new ObjectManipulationControl(66, 45);
-        _overlayFloatingViewerControl.ResetToDefaultXY();
-        Canvas.SetLeft(OverlayFloating, _overlayFloatingViewerControl.GetCoordsX());
-        Canvas.SetTop(OverlayFloating, _overlayFloatingViewerControl.GetCoordsY());
-      }
+
     }
   }
 }

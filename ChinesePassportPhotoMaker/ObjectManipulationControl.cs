@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace ChinesePassportPhotoMaker
 {
@@ -23,7 +24,7 @@ namespace ChinesePassportPhotoMaker
     private double _coordMouseInMovingY = 0; // ... Y ...
     private double _imageWidth = 600; // To track image width for zooming
     private double _imageHeight = 800; // ... height ...
-    private double _imageWidthByHeightRatio = 0.75;  // Track the width/height ratio to keep ratio when zooming
+    private BitmapImage _image;
     private bool _isSelected = false; // WPF can't differentiate which object is on focus when moving, use this as fix
     
     /*
@@ -37,18 +38,15 @@ namespace ChinesePassportPhotoMaker
       ResetToDefaultXY();
     }
     /*
-     * For image, or anything that needs zooming
-     * to track the width/height
-     */
-    public void SetImageWHR(double width, double height, double ratio)
-    {
-      _imageWidth = width;
-      _imageHeight = height;
-      _imageWidthByHeightRatio = ratio;
-    }
-    /*
      * Setters/Getters
      */
+    public BitmapImage Image
+    {
+      get { return _image; }
+      set { 
+        _image = value; 
+      }
+    }
     public double CanvasX
     {
       get { return _canvasX; }
@@ -68,11 +66,6 @@ namespace ChinesePassportPhotoMaker
     {
       get { return _imageHeight; }
       set { _imageHeight = value; }
-    }
-    public double ImageWidthByHeightRatio
-    {
-      get { return _imageWidthByHeightRatio; }
-      set { _imageWidthByHeightRatio = value; }
     }
     public double CoordMouseDownX
     {
@@ -173,9 +166,25 @@ namespace ChinesePassportPhotoMaker
     public void SetImageByPoint(int pointDeltaPercent)
     {
       _imageWidth = _imageWidth * (100 + pointDeltaPercent) / 100;
-      _imageHeight = _imageWidth / _imageWidthByHeightRatio;
+      _imageHeight = _imageWidth / ((double)_image.PixelWidth / (double)_image.PixelHeight);
     }
 
+    public void SetImageWidthHeight(double givingWidth, double givingHeight)
+    {
+      double wRatio = givingWidth / (double)_image.PixelWidth;
+      double hRatio = givingHeight / (double)_image.PixelHeight;
+      if (wRatio > hRatio)
+      {
+        _imageWidth = _image.PixelWidth * wRatio;
+        _imageHeight = _imageWidth / ((double)_image.PixelWidth / (double)_image.PixelHeight);
+      }
+      else
+      {
+        _imageHeight = _image.PixelHeight * hRatio;
+        _imageWidth = givingHeight * ((double)_image.PixelWidth / (double)_image.PixelHeight);
+      }
+
+    }
 
   }
 }
