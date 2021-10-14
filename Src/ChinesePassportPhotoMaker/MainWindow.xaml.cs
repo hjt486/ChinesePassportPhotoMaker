@@ -140,8 +140,7 @@ namespace ChinesePassportPhotoMaker
       Size size = new Size(ImageCanvas.Width, ImageCanvas.Height);
       ImageCanvas.Measure(size);
       ImageCanvas.Arrange(new Rect(size));
-
-      RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96d, 96d, PixelFormats.Pbgra32);
+      RenderTargetBitmap renderBitmap = new RenderTargetBitmap((int)size.Width, (int)size.Height, 96d, 96d, PixelFormats.Default);
       renderBitmap.Render(ImageOnlyCanvas);
       ImageSource im = (ImageSource)renderBitmap.Clone();
       BitmapFrame bp = CreateResizedImage(im, 396, 576, 0); // Around 300 DPI
