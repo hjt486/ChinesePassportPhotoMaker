@@ -6,6 +6,7 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ChinesePassportPhotoMaker"
         mc:Ignorable="d"
+
         Title="中国护照照片生成器" Width="500" MinHeight="768">
   <Window.Resources>
     <System:Double x:Key="PhotoWidth">396</System:Double>
@@ -28,7 +29,7 @@
       <Setter Property="BorderBrush" Value="DarkGray"/>
     </Style>
     <Style x:Key="HelperPointer" TargetType="Line">
-      <Setter Property="Stroke" Value="DarkGray"/>
+      <Setter Property="Stroke" Value="HotPink"/>
       <Setter Property="StrokeThickness" Value="5"/>
     </Style>
   </Window.Resources>
@@ -80,7 +81,8 @@
           </Grid>
           <TextBlock TextWrapping="Wrap">
               当前版本：2021-10-12；使用前，请您再次确认
-              <Hyperlink NavigateUri="https://ppt.mfa.gov.cn/appo/page/instruction.html">
+              <Hyperlink NavigateUri=""
+                          Click="Hyperlink_Click">
                 最新护照照片标准</Hyperlink>。
           </TextBlock>
         </StackPanel>
@@ -147,41 +149,59 @@
           </Canvas>
           <Canvas x:Name="Helpers">
             <Line Style="{StaticResource HelperPointer}" X1="40" Y1="30" X2="130" Y2="16"/>
-            <Border Style="{StaticResource HelperBlock}" Canvas.Top="20" Canvas.Left="10">
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="20" Canvas.Left="10" Background="Gold">
               <TextBlock>
                 头部不能落在
                 <LineBreak/>
                 此红色区域
               </TextBlock>
             </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="40" Y1="120" X2="198" Y2="120"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="100" Canvas.Left="10">
+              <TextBlock>
+                1.保持鼻尖与
+                <LineBreak/>
+                黄色参考线对齐
+              </TextBlock>
+            </Border>
             <Line Style="{StaticResource HelperPointer}" X1="270" Y1="30" X2="200" Y2="50"/>
             <Border Style="{StaticResource HelperBlock}" Canvas.Top="5" Canvas.Left="255">
               <TextBlock>
-                头部上沿必须
+                2.将头部上沿
                 <LineBreak/>
-                在此黄色区域
+                放入黄色区域
               </TextBlock>
             </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="320" Y1="80" X2="200" Y2="65"/>
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="75" Canvas.Left="302">
+              <TextBlock>
+                3.拖动绿色方框
+                <LineBreak/>
+                使头部上沿
+                <LineBreak/>
+                被包含在内
+              </TextBlock>
+            </Border>
+            <Line Style="{StaticResource HelperPointer}" X1="60" Y1="475" X2="200" Y2="430"/>
             <Line Style="{StaticResource HelperPointer}" X1="40" Y1="450" X2="88" Y2="275"/>
             <Line Style="{StaticResource HelperPointer}" X1="40" Y1="450" X2="304" Y2="275"/>
             <Border Style="{StaticResource HelperBlock}" Canvas.Top="420" Canvas.Left="10">
               <TextBlock>
-                脸部边缘必须
+                4.使用鼠标滚轮缩放照片
                 <LineBreak/>
-                在此绿色区域
+                使脸部两侧边缘（不含耳朵）
                 <LineBreak/>
-                （不含耳朵）
+                以及下巴均在此绿色区域中
               </TextBlock>
             </Border>
-            <Line Style="{StaticResource HelperPointer}" X1="360" Y1="475" X2="200" Y2="430"/>
-            <Border Style="{StaticResource HelperBlock}" Canvas.Top="460" Canvas.Left="305">
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="420" Canvas.Left="305" >
               <TextBlock>
-                下巴下沿必须
+                5.再次检查
                 <LineBreak/>
-                在此绿色区域
+                步骤1,2,3,4
               </TextBlock>
             </Border>
-            <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="10">
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="10"  Background="Gold">
               <TextBlock>
                 下巴不能落在
                 <LineBreak/>
@@ -197,13 +217,11 @@
                 此绿色方框
               </TextBlock>
             </Border>
-            <Border Style="{StaticResource HelperBlock}" Canvas.Top="510" Canvas.Left="150" Background="GreenYellow">
+            <Border Style="{StaticResource HelperBlock}" Canvas.Top="520" Canvas.Left="150" Background="GreenYellow">
               <TextBlock>
-                请将黄色参考线对齐鼻尖使照片居中
+                注：使用鼠标点击照片并拖拽来移动照片
                 <LineBreak/>
-                使用鼠标点击照片并拖拽来移动照片
-                <LineBreak/>
-                滚动鼠标滚轮来缩放照片
+                注：滚动鼠标滚轮来缩放照片
               </TextBlock>
             </Border>
           </Canvas>

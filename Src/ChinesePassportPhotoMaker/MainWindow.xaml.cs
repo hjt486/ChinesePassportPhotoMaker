@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -320,7 +321,18 @@ namespace ChinesePassportPhotoMaker
         ShowExampleCheckBox.IsChecked = false;
       }
     }
-
+    /*
+     * https://stackoverflow.com/questions/10238694/example-using-hyperlink-in-wpf
+     */
+    private void Hyperlink_Click(object sender, RoutedEventArgs e)
+    {
+      Hyperlink link = sender as Hyperlink;
+      System.Diagnostics.Process.Start(new ProcessStartInfo
+      {
+        FileName = "https://ppt.mfa.gov.cn/appo/page/instruction.html",
+        UseShellExecute = true
+      });
+    }
     private void SaveFileButton_Click(object sender, RoutedEventArgs e)
     {
       SaveImageFromCanvasToFile();
