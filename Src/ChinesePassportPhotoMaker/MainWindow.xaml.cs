@@ -47,9 +47,9 @@ namespace ChinesePassportPhotoMaker
     private ObjectManipulationControl _overlayFloatingViewerControl = new ObjectManipulationControl(0, 0);
     private double _imageViewWidth = 623.25;
     private double _imageViewHeight = 831;
-    private double _overlayFloatingUpperLimit= 36;
-    private double _overlayFloatingLowerLimit = 96;
-    private int _jpegCompressFactor = 85;
+    private double _overlayFloatingUpperLimit= 16;
+    private double _overlayFloatingLowerLimit = 116;
+    private int _jpegCompressFactor = 98;
 
     public MainWindow()
     {
