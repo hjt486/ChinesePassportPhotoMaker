@@ -6,7 +6,8 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib"
         xmlns:local="clr-namespace:ChinesePassportPhotoMaker"
         mc:Ignorable="d"
-
+        SizeToContent ="Height"
+        Closing="Window_Closing"
         Title="中国护照照片生成器" Width="500" MinHeight="768">
   <Window.Resources>
     <System:Double x:Key="PhotoWidth">396</System:Double>
@@ -52,8 +53,10 @@
               <ColumnDefinition Width="3*"/>
               <ColumnDefinition Width="1*"/>
               <ColumnDefinition Width="3*"/>
+              <!--
               <ColumnDefinition Width="1*"/>
               <ColumnDefinition Width="2*"/>
+              -->
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="OpenFileButton" Click="OpenFileButton_Click">打开照片</Button>
             <Grid Grid.Column="2">
@@ -77,10 +80,10 @@
               <CheckBox x:Name="ShowHelpersCheckBox" Checked="ShowHelpersCheckBox_Checked" Unchecked="ShowHelpersCheckBox_Unchecked" IsChecked="True">显示说明</CheckBox>
               <CheckBox x:Name="ShowExampleCheckBox" Checked="ShowExampleCheckBox_Checked" Unchecked="ShowExampleCheckBox_Unchecked" IsChecked="True">显示示例</CheckBox>
             </WrapPanel>
-            <Button Grid.Column="6">关于</Button>
+            <!--<Button Grid.Column="6">关于</Button>-->
           </Grid>
           <TextBlock TextWrapping="Wrap">
-              当前版本：2021-10-12；使用前，请您再次确认
+              当前版本：2021-10-13；使用前，请您再次确认
               <Hyperlink NavigateUri=""
                           Click="Hyperlink_Click">
                 最新护照照片标准</Hyperlink>。

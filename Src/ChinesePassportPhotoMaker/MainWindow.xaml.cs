@@ -342,5 +342,10 @@ namespace ChinesePassportPhotoMaker
     {
       int.TryParse(jpegCompressRatioTextBox.Text, out _jpegCompressFactor);
     }
+
+    private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+    {
+      System.Windows.Application.Current.Shutdown();
+    }
   }
 }
