@@ -107,7 +107,7 @@
                   Mouse.MouseWheel="ImageViewer_MouseWheel"
                   Mouse.MouseMove="ImageOrOverlay_MouseMove"
                   Mouse.MouseUp="ImageViewer_MouseUp">
-            <Canvas Name="ImageOnlyCanvas">
+            <Canvas Name="ImageOnlyCanvas" Background="White">
               <Rectangle Width="{StaticResource PhotoWidth}" Height="{StaticResource PhotoHeight}"  Canvas.Left="0" Canvas.Top="0" Fill="White" Opacity="1" />
               <Image
               x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
