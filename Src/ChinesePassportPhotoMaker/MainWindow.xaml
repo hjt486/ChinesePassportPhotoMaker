@@ -10,10 +10,8 @@
         Closing="Window_Closing"
         Title="中国护照照片生成器" Width="500" MinHeight="768">
   <Window.Resources>
-    <System:Double x:Key="PhotoWidth">396</System:Double>
-    <System:Double x:Key="PhotoHeight">576</System:Double>
-    <System:Double x:Key="PhotoBoderWidth">406</System:Double>
-    <System:Double x:Key="PhotoBoderHeight">586</System:Double>
+    <System:Double x:Key="PhotoBoderWidth">400</System:Double>
+    <System:Double x:Key="PhotoBoderHeight">577</System:Double>
     <Thickness x:Key="Margin1" Left="25" Top="10" Right="25" Bottom="25" />
     <Thickness x:Key="Padding1" Left="25" Top="10" Right="25" Bottom="10" />
     <Style TargetType="{x:Type CheckBox}">
@@ -101,45 +99,60 @@
                 Background="GhostWhite" BorderBrush="Gainsboro" BorderThickness="5">
         <Grid>
           <Canvas x:Name="ImageCanvas"
-                  Width="{StaticResource PhotoWidth}"
-                  Height="{StaticResource PhotoHeight}"
+                  Width = "{x:Static local:MainWindow.ImageViewerWidthD}"
+                  Height = "{x:Static local:MainWindow.ImageViewerHeightD}"
                   Background="White" ClipToBounds="True"
                   Mouse.MouseWheel="ImageViewer_MouseWheel"
                   Mouse.MouseMove="ImageOrOverlay_MouseMove"
                   Mouse.MouseUp="ImageViewer_MouseUp">
             <Canvas Name="ImageOnlyCanvas" Background="White">
-              <Rectangle Width="{StaticResource PhotoWidth}" Height="{StaticResource PhotoHeight}"  Canvas.Left="0" Canvas.Top="0" Fill="White" Opacity="1" />
+
+              <Rectangle Width = "{x:Static local:MainWindow.ImageViewerWidthD}" Height = "{x:Static local:MainWindow.ImageViewerHeightD}" Canvas.Left="0" Canvas.Top="0" Fill="White" Opacity="1" />
               <Image
               x:Name="ImageViewer" HorizontalAlignment="Left" VerticalAlignment="Top"
               Margin="0,0,0,0"
-              Canvas.Top="-53" Canvas.Left="-115"
-              Width="623.25"
-              Height="831"
+              Canvas.Top="{x:Static local:MainWindow.ImageViewY}"
+              Canvas.Left="{x:Static local:MainWindow.ImageViewX}"
+              Width = "{x:Static local:MainWindow.ImageWidth}"
+              Height = "{x:Static local:MainWindow.ImageHeight}"
               Stretch="Fill"
               Mouse.MouseDown="ImageViewer_MouseDown"
               Source="/ChinesePassportPhotoMaker;component/Resources/Example.png"
               ClipToBounds="False"/>
             </Canvas>
             <Canvas Name="OverlayFixed">
-              <Rectangle Width="{StaticResource PhotoWidth}" Height="36" Canvas.Left="0" Canvas.Top="0" Fill="Red" Opacity="0.3" />
-              <Rectangle Width="198" Height="24" Canvas.Left="99" Canvas.Top="36" Fill="Yellow" Opacity="0.3" />
-              <Rectangle Width="{StaticResource PhotoWidth}" Height="84" Canvas.Left="0" Canvas.Top="492" Fill="Red" Opacity="0.3" />
-              <Line StrokeThickness="2" X1="198" Y1="0" X2="198" Y2="{StaticResource PhotoHeight}" Canvas.Left="0" Canvas.Top="0" Stroke="Yellow" Opacity="0.3" />
+              <Rectangle Width = "{x:Static local:MainWindow.ImageViewerWidthD}"
+                         Height="{x:Static local:MainWindow.UpperRedBlockHeight}"
+                         Canvas.Left="0"
+                         Canvas.Top="0" Fill="Red" Opacity="0.3" />
+              <Rectangle Width ="{x:Static local:MainWindow.YellowBlockWidth}"
+                         Height ="{x:Static local:MainWindow.YellowBlockHeight}"
+                         Canvas.Left ="{x:Static local:MainWindow.YellowBlockX}"
+                         Canvas.Top ="{x:Static local:MainWindow.YellowBlockY}"
+                         Fill="Yellow" Opacity="0.3" />
+              <Rectangle Width = "{x:Static local:MainWindow.ImageViewerWidthD}"
+                         Height ="{x:Static local:MainWindow.LowerRedBlockHeight}"
+                         Canvas.Left="0"
+                         Canvas.Top ="{x:Static local:MainWindow.LowerRedBlockY}"
+                         Fill="Red" Opacity="0.3" />
+              <Line StrokeThickness="2"
+                    X1="{x:Static local:MainWindow.HorizontalCenterX}" Y1="0"
+                    X2="{x:Static local:MainWindow.HorizontalCenterX}" Y2 = "{x:Static local:MainWindow.ImageViewerHeightD}" Canvas.Left="0" Canvas.Top="0" Stroke="Yellow" Opacity="0.3" />
             </Canvas>
             <Canvas Name="OverlayFloating"
                     Mouse.MouseDown="OverlayFloating_MouseDown"
                     Mouse.MouseUp="OverlayFloating_MouseUp"
-                    Canvas.Left="66"
-                    Canvas.Top="45"
+                    Canvas.Left="{x:Static local:MainWindow.OverlayFloatingViewerX}"
+                    Canvas.Top="{x:Static local:MainWindow.OverlayFloatingViewerY}"
                     >
               <Path Fill="Green" Opacity="0.3">
                 <Path.Data>
                   <CombinedGeometry GeometryCombineMode="Exclude">
                     <CombinedGeometry.Geometry1>
-                      <RectangleGeometry Rect="0,0,264,396"/>
+                      <RectangleGeometry Rect="{x:Static local:MainWindow.OutterRefBlock}"/>
                     </CombinedGeometry.Geometry1>
                     <CombinedGeometry.Geometry2>
-                      <RectangleGeometry Rect="42,30,180,336"/>
+                      <RectangleGeometry Rect="{x:Static local:MainWindow.InnerRefBlock}"/>
                     </CombinedGeometry.Geometry2>
                   </CombinedGeometry>
                 </Path.Data>
