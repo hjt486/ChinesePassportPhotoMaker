@@ -25,6 +25,11 @@
     <img src="graphics/icon.png" alt="Logo" width="128" height="128">
   </a>
 
+  <h4><b> 已停止更新！</b></h4>
+  请移步去最新跨平台网页版：<a href="https://github.com/hjt486/passport-photo-maker"><strong>{ 点击查看 }</strong></a>
+
+  <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
 <h3 align="center">中国护照照片生成器</h3>
 
   <p align="center">
@@ -32,8 +37,6 @@
     <br />
     <strong>注：目前仅支持运行在Windows平台。</strong>
     <br />
-    <br />
-    <a href="https://github.com/hjt486/ChinesePassportPhotoMaker/blob/main/build/%E4%B8%AD%E5%9B%BD%E6%8A%A4%E7%85%A7%E7%85%A7%E7%89%87%E7%94%9F%E6%88%90%E5%99%A8.zip"><strong>{ 点击下载程序 }</strong></a>
     <br />
     <a href="https://www.youtube.com/watch?v=Q86svYysahA"><strong>{ 点击查看视频教程 }</strong></a>
     <!--
